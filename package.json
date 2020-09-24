@@ -1,13 +1,15 @@
 {
   "name": "dev-logger",
   "version": "0.0.0",
+  "homepage": "https://alexriosj.github.io/dev-logger",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "deploy": "gh-pages -d dist/dev-logger"
   },
   "private": true,
   "dependencies": {
@@ -22,6 +24,7 @@
     "bootstrap": "4.0.0-beta.2",
     "core-js": "^2.5.4",
     "font-awesome": "^4.7.0",
+    "gh-pages": "^3.1.0",
     "jquery": "^3.5.1",
     "popper.js": "^1.16.1",
     "rxjs": "~6.3.3",
