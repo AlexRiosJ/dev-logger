@@ -13,19 +13,22 @@ export class LogService {
   logs: Log[];
 
   private logSource = new BehaviorSubject<Log>({ id: null, text: null, date: null });
-
   selectedLog = this.logSource.asObservable();
 
+  private stateSource = new BehaviorSubject<boolean>(true);
+  stateClear = this.stateSource.asObservable();
+
   constructor() {
-    this.logs = [
-      { id: '1', text: 'Generated components 1', date: new Date('12/07/2020 12:34:32') },
-      { id: '2', text: 'Generated components 2', date: new Date('12/07/2020 12:34:32') },
-      { id: '3', text: 'Generated components 3', date: new Date('12/07/2020 12:34:32') }
-    ];
+    this.logs = [];
   }
 
   getLogs(): Observable<Log[]> {
-    return of(this.logs);
+    if (localStorage.getItem('dev-logger-logs') === null) {
+      this.logs = [];
+    } else {
+      this.logs = JSON.parse(localStorage.getItem('dev-logger-logs'));
+    }
+    return of(this.logs.sort((a, b) => b.date - a.date));
   }
 
   setFormLog(log: Log) {
@@ -34,6 +37,7 @@ export class LogService {
 
   addLog(log: Log) {
     this.logs.unshift(log);
+    this.updateLocalStorage();
   }
 
   updateLog(log: Log) {
@@ -43,6 +47,7 @@ export class LogService {
       }
     });
     this.logs.unshift(log);
+    this.updateLocalStorage();
   }
 
   deleteLog(log: Log) {
@@ -51,5 +56,14 @@ export class LogService {
         this.logs.splice(index, 1);
       }
     });
+    this.updateLocalStorage();
+  }
+
+  clearState() {
+    this.stateSource.next(true);
+  }
+
+  updateLocalStorage() {
+    localStorage.setItem('dev-logger-logs', JSON.stringify(this.logs));
   }
 }
